@@ -19,7 +19,7 @@ namespace CombinedTransaction
             var config = new SdkConfig(Utils.ApiUrl);
             var client = new Client(config, handler);
 
-            // Ver2 implements module system. To enable modules, register is required.
+            // In order to use a miyabi module, registering types is required.
             AssetTypesRegisterer.RegisterTypes();
 
             await CreateAssetTable(client);
@@ -80,7 +80,7 @@ namespace CombinedTransaction
         {
             var generalApi = new GeneralApi(client);
 
-            // Create gen entry
+            // Create generate asset entry.
             var coinA = new AssetGen(
                 TableNames[0],
                 1000,

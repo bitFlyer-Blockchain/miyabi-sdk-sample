@@ -20,11 +20,11 @@ namespace Utility
         public static KeyPair GetContractAdminKeyPair() =>
             GetKeyPair("14e3a2d16c8a43a4eb1b088b32bca2abaf274e3f185afc9c15b33491c8deb9a6");
 
-        // Represetns table owner or contract owner
+        // Represents table owner or contract owner
         public static KeyPair GetOwnerKeyPair() =>
             GetKeyPair("0000000000000000000000000000000000000000000000000000000000000001");
 
-        // Represetns users
+        // Represents users
         public static KeyPair GetUser0KeyPair() =>
             GetKeyPair("0000000000000000000000000000000000000000000000000000000000000010");
 

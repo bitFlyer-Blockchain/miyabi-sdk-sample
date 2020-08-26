@@ -34,7 +34,7 @@ namespace EntitySample
                 ByteString.Parse(Key2),
             };
 
-            // Ver2 implements module system. To enable modules, register is required.
+            // In order to use a miyabi module, registering types is required.
             EntityTypesRegisterer.RegisterTypes();
 
             await CreateEntityTable(client, TableName);

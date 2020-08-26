@@ -16,7 +16,7 @@ namespace SmartContractSample
 {
     class Program
     {
-        const string ContractName = "Miyabi.Tests.SC1"; // Name Space + "." + Class name
+        const string ContractName = "Contract.Sample.SC1"; // Name Space + "." + Class name
         const string InstanceName = "SmartContractInstanceSample";
 
         static readonly ByteString s_AssemblyId =
@@ -29,8 +29,7 @@ namespace SmartContractSample
             var config = new SdkConfig(Utils.ApiUrl);
             var client = new Client(config, handler);
 
-            // Ver2 implements module system. To enable modules, register is required.
-            //AssetTypesRegisterer.RegisterTypes();
+            // In order to use a miyabi module, registering types is required.
             ContractTypesRegisterer.RegisterTypes();
 
             await DeployContract(client);
@@ -49,7 +48,7 @@ namespace SmartContractSample
 
             // Create entry
             var sources = new[] { File.ReadAllText("sc\\sc1.cs") };
-            var dependencies = new[] { "Miyabi.Binary.Models", "Miyabi.ModelSdk" };
+            var dependencies = new[] { "Miyabi.Binary.Models", "Miyabi.ModelSdk"};
             var instantiators = new[] { new PublicKeyAddress(Utils.GetOwnerKeyPair().PublicKey) };
             var entry = new ContractDeploy(sources, dependencies, instantiators);
 

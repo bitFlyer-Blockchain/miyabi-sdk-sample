@@ -3,7 +3,7 @@ using Miyabi.Binary.Models;
 using Miyabi.ContractSdk;
 using Miyabi.ModelSdk.Execution;
 
-namespace Miyabi.Tests
+namespace Contract.Sample
 {
     public class SC1 : ContractBase
     {
@@ -48,7 +48,7 @@ namespace Miyabi.Tests
             }
         }
 
-        public void Write(ByteString key, ByteString val)
+        public void Write(Miyabi.ByteString key, Miyabi.ByteString val)
         {
             var tableName = s_tableName + InstanceName;
             var ctx = StateWriter;
@@ -62,7 +62,7 @@ namespace Miyabi.Tests
             table.SetValue(key, val);
         }
 
-        public ByteString Read(ByteString key)
+        public Miyabi.ByteString Read(Miyabi.ByteString key)
         {
             var tableName = s_tableName + InstanceName;
             IStateReader reader = StateWriter;

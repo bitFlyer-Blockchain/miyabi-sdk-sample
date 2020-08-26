@@ -19,7 +19,7 @@ namespace AssetSample
             var config = new SdkConfig(Utils.ApiUrl);
             var client = new Client(config, handler);
 
-            // Ver2 implements module system. To enable modules, register is required.
+            // In order to use a miyabi module, registering types is required.
             AssetTypesRegisterer.RegisterTypes();
 
             await CreateAssetTable(client);
@@ -71,7 +71,7 @@ namespace AssetSample
         {
             var generalApi = new GeneralApi(client);
 
-            // Create gen entry
+            // Create asset generate entry.
             var entry = new AssetGen(
                 TableName,
                 1000,
@@ -105,7 +105,7 @@ namespace AssetSample
                 new PublicKeyAddress(Utils.GetUser0KeyPair()),
                 new PublicKeyAddress(Utils.GetUser1KeyPair()));
 
-            // Using SimpleSignedTransacttion is the easiest way to create
+            // Using SimpleSignedTransaction is the easiest way to create
             // simple transactions.
             var txSigned = TransactionCreator.SimpleSignedTransaction(
                 entry, Utils.GetUser0KeyPair().PrivateKey);

@@ -6,6 +6,7 @@ using Miyabi.Contract.Models;
 using Miyabi.Entity.Models;
 using System;
 using System.Threading.Tasks;
+using Miyabi.NFT.Models;
 using Utility;
 
 namespace GeneralApiCall
@@ -19,12 +20,13 @@ namespace GeneralApiCall
             var config = new SdkConfig(Utils.ApiUrl);
             var client = new Client(config, handler);
 
-            // Ver2 implements module system. To enable modules, register is required.
+            // In order to use a miyabi module, registering types is required.
             CommonTypesRegisterer.RegisterCommonTypes();
             AssetTypesRegisterer.RegisterTypes();
             BinaryTypesRegisterer.RegisterTypes();
             EntityTypesRegisterer.RegisterTypes();
             ContractTypesRegisterer.RegisterTypes();
+            NFTTypesRegisterer.RegisterTypes();
             ContractRegistration.Initialize();
 
             await GetTables(client);

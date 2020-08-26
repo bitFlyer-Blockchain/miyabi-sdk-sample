@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Miyabi.Api" Version="2.1.0" />
-    <PackageReference Include="Miyabi.Asset.Client" Version="2.1.0" />
-    <PackageReference Include="Miyabi.ClientSdk" Version="2.1.0" />
-    <PackageReference Include="Miyabi.Common" Version="2.1.0" />
-    <PackageReference Include="Miyabi.Entity.Client" Version="2.1.0" />
-    <PackageReference Include="Miyabi.Entity.Models" Version="2.1.0" />
+    <PackageReference Include="Miyabi.Api" Version="2.2.1" />
+    <PackageReference Include="Miyabi.Asset.Client" Version="2.2.1" />
+    <PackageReference Include="Miyabi.ClientSdk" Version="2.2.1" />
+    <PackageReference Include="Miyabi.Common" Version="2.2.1" />
+    <PackageReference Include="Miyabi.Entity.Client" Version="2.2.1" />
+    <PackageReference Include="Miyabi.Entity.Models" Version="2.2.1" />
   </ItemGroup>
 
   <ItemGroup>
