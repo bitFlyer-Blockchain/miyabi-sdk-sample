@@ -59,7 +59,7 @@ namespace EntitySample
             var generalApi = new GeneralApi(client);
 
             // Create entry
-            var entry = new CreateTable(new EntityTableDescriptor(
+            var entry = new CreateEntityTable(
                 tableName,
                 false,
                 false,
@@ -67,7 +67,7 @@ namespace EntitySample
                 {
                     new PublicKeyAddress(
                         Utils.GetOwnerKeyPair().PublicKey)
-                }));
+                });
 
             // Create transaction
             var tx = TransactionCreator.CreateTransaction(
@@ -96,7 +96,7 @@ namespace EntitySample
             // Create add entry
             var entry = new AddEntity(data, tableName, key, reference);
 
-            // Create signed transaction with builder. To generate asset,
+            // Create signed transaction with builder. To add entity,
             // table owner's private key is required.
             var txSigned = TransactionCreator.CreateTransactionBuilder(
                 new [] { entry },

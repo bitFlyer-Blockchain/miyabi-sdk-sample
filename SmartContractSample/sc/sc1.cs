@@ -1,5 +1,6 @@
 using System;
 using Miyabi.Binary.Models;
+using Miyabi.Contract.Models;
 using Miyabi.ContractSdk;
 using Miyabi.ModelSdk.Execution;
 
@@ -11,7 +12,8 @@ namespace Contract.Sample
 
         public SC1(ContractInitializationContext ctx)
             : base(ctx)
-        { }
+        {
+        }
 
         public override bool Instantiate(string[] args)
         {
@@ -20,8 +22,13 @@ namespace Contract.Sample
                 return false;
             }
 
-            var tableName = s_tableName + InstanceName;
-            var tableDescriptor = new BinaryTableDescriptor(tableName, false);
+            string tableName = s_tableName + InstanceName;
+            var address = new[] {ContractAddress.FromInstanceId(InstanceId)};
+            BinaryTableDescriptor tableDescriptor = new BinaryTableDescriptor(
+                tableName,
+                false,
+                false,
+                address);
 
             try
             {
@@ -36,7 +43,7 @@ namespace Contract.Sample
 
         public override bool Delete()
         {
-            var tableName = s_tableName + InstanceName;
+            string tableName = s_tableName + InstanceName;
             try
             {
                 StateWriter.DeleteTable(tableName);
@@ -50,8 +57,8 @@ namespace Contract.Sample
 
         public void Write(Miyabi.ByteString key, Miyabi.ByteString val)
         {
-            var tableName = s_tableName + InstanceName;
-            var ctx = StateWriter;
+            string tableName = s_tableName + InstanceName;
+            IContractStateWriter ctx = StateWriter;
             bool res = ctx.TryGetTableWriter(
                 tableName, out IBinaryTableWriter table);
             if (!res)
@@ -59,12 +66,12 @@ namespace Contract.Sample
                 throw new InvalidOperationException("missing table");
             }
 
-            table.SetValue(key, val);
+            table.UpsertRow(key, val);
         }
 
         public Miyabi.ByteString Read(Miyabi.ByteString key)
         {
-            var tableName = s_tableName + InstanceName;
+            string tableName = s_tableName + InstanceName;
             IStateReader reader = StateWriter;
             if (!reader.TryGetTableReader(
                 tableName, out IBinaryTableReader table))
@@ -72,7 +79,7 @@ namespace Contract.Sample
                 return null;
             }
 
-            table.TryGetValue(key, out var value);
+            table.TryGetData(key, out Miyabi.ByteString value);
             return value;
         }
     }

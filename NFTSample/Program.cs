@@ -1,16 +1,16 @@
-using Miyabi.Asset.Client;
-using Miyabi.Asset.Models;
+﻿using Miyabi.NFT.Client;
+using Miyabi.NFT.Models;
 using Miyabi.ClientSdk;
 using Miyabi.Common.Models;
 using System;
 using System.Threading.Tasks;
 using Utility;
 
-namespace AssetSample
+namespace NFTSample
 {
     class Program
     {
-        const string TableName = "AssetTableSample";
+        const string TableName = "NFTTableSample";
 
         static async Task Main(string[] args)
         {
@@ -20,25 +20,28 @@ namespace AssetSample
             var client = new Client(config, handler);
 
             // In order to use a miyabi module, registering types is required.
-            AssetTypesRegisterer.RegisterTypes();
+            NFTTypesRegisterer.RegisterTypes();
 
-            await CreateAssetTable(client);
-            await GenerateAsset(client);
-            await ShowAsset(client);
-            await MoveAsset(client);
-            await ShowAsset(client);
+            var tokenId = "my_token_id";
+
+            await CreateNFTTable(client);
+            await AddNFT(client, tokenId);
+            await ShowNFTBalance(client);
+            await MoveNFT(client, tokenId);
+            await ShowNFTBalance(client);
 
             Console.WriteLine("Press enter to exit");
             Console.ReadLine();
         }
 
-        private static async Task CreateAssetTable(IClient client)
+        private static async Task CreateNFTTable(IClient client)
         {
             // General API has SendTransactionAsync
             var generalApi = new GeneralApi(client);
 
             // Create entry
-            var entry = new CreateAssetTable(
+            // tableOwner will be token admin if this entry used.
+            var entry = new CreateNFTTable(
                 TableName,
                 false,
                 false,
@@ -67,18 +70,18 @@ namespace AssetSample
             Console.WriteLine($"txid={tx.Id}, result={result}");
         }
 
-        private static async Task GenerateAsset(IClient client)
+        private static async Task AddNFT(IClient client, string tokenId)
         {
             var generalApi = new GeneralApi(client);
 
-            // Create asset generate entry.
-            var entry = new AssetGen(
+            // Create nft add entry.
+            var entry = new NFTAdd(
                 TableName,
-                1000,
+                tokenId,
                 new PublicKeyAddress(Utils.GetUser0KeyPair().PublicKey));
 
-            // Create signed transaction with builder. To generate asset,
-            // table owner's private key is required.
+            // Create signed transaction with builder. To add nft,
+            // token admin's private key is required.
             var txSigned = TransactionCreator.CreateTransactionBuilder(
                 new [] { entry },
                 new []
@@ -94,15 +97,14 @@ namespace AssetSample
             Console.WriteLine($"txid={txSigned.Id}, result={result}");
         }
 
-        private static async Task MoveAsset(IClient client)
+        private static async Task MoveNFT(IClient client, string tokenId)
         {
             var generalApi = new GeneralApi(client);
 
-            // Create move entry
-            var entry = new AssetMove(
+            // Create nft move entry
+            var entry = new NFTMove(
                 TableName,
-                1000,
-                new PublicKeyAddress(Utils.GetUser0KeyPair()),
+                tokenId,
                 new PublicKeyAddress(Utils.GetUser1KeyPair()));
 
             // Using SimpleSignedTransaction is the easiest way to create
@@ -116,10 +118,10 @@ namespace AssetSample
             Console.WriteLine($"txid={txSigned.Id}, result={result}");
         }
 
-        private static async Task ShowAsset(IClient client)
+        private static async Task ShowNFTBalance(IClient client)
         {
-            // AssetClient has access to asset endpoints
-            var assetClient = new AssetClient(client);
+            // nftClient has access to nft endpoints
+            var nftClient = new NFTClient(client);
 
             var addresses = new Address[] {
                 new PublicKeyAddress(Utils.GetUser0KeyPair()),
@@ -128,8 +130,8 @@ namespace AssetSample
 
             foreach (var address in addresses)
             {
-                var result = await assetClient.GetAssetAsync(TableName, address);
-                Console.WriteLine($"address={address}, amount={result.Value}");
+                var result = await nftClient.GetBalanceAsync(TableName, address);
+                Console.WriteLine($"address={address}, count={result.Value}");
             }
         }
     }

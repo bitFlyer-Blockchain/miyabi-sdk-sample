@@ -48,9 +48,8 @@ namespace SmartContractSample
 
             // Create entry
             var sources = new[] { File.ReadAllText("sc\\sc1.cs") };
-            var dependencies = new[] { "Miyabi.Binary.Models", "Miyabi.ModelSdk"};
             var instantiators = new[] { new PublicKeyAddress(Utils.GetOwnerKeyPair().PublicKey) };
-            var entry = new ContractDeploy(sources, dependencies, instantiators);
+            var entry = new ContractDeploy(sources, instantiators: instantiators);
 
             // Create transaction
             var tx = TransactionCreator.CreateTransaction(
@@ -77,7 +76,8 @@ namespace SmartContractSample
 
             // Create gen entry
             var arguments = new[] { "dummy" };
-            var entry = new ContractInstantiate(s_AssemblyId, ContractName, InstanceName, arguments);
+            var owners = new Address[] {new PublicKeyAddress(Utils.GetOwnerKeyPair())};
+            var entry = new ContractInstantiate(s_AssemblyId, ContractName, InstanceName, owners, arguments);
 
             // Create signed transaction with builder. To generate instantiate contract,
             // table admin and contract owner private key is required.

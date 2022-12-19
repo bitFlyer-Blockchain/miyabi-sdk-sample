@@ -60,4 +60,5 @@ NuGet.Config
 # Intellij
 .idea
 
-
+# vs
+.vs/
