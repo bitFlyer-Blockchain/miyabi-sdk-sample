@@ -7,6 +7,7 @@ using Miyabi.Entity.Models;
 using System;
 using System.Threading.Tasks;
 using Miyabi.NFT.Models;
+using Miyabi.PrivateData.Models;
 using Utility;
 
 namespace GeneralApiCall
@@ -27,6 +28,7 @@ namespace GeneralApiCall
             EntityTypesRegisterer.RegisterTypes();
             ContractTypesRegisterer.RegisterTypes();
             NFTTypesRegisterer.RegisterTypes();
+            PrivateDataTypesRegisterer.RegisterTypes();
             ContractRegistration.Initialize();
 
             await GetTables(client);

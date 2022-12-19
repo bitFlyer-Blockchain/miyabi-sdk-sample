@@ -38,7 +38,7 @@ namespace CombinedTransaction
             var generalApi = new GeneralApi(client);
 
             // Create tables
-            var tableA = new CreateTable(new AssetTableDescriptor(
+            var tableA = new CreateAssetTable(
                 TableNames[0],
                 false,
                 false,
@@ -46,8 +46,8 @@ namespace CombinedTransaction
                 {
                     new PublicKeyAddress(
                         Utils.GetOwnerKeyPair().PublicKey)
-                }));
-            var tableB = new CreateTable(new AssetTableDescriptor(
+                });
+            var tableB = new CreateAssetTable(
                 TableNames[1],
                 false,
                 false,
@@ -55,7 +55,7 @@ namespace CombinedTransaction
                 {
                     new PublicKeyAddress(
                         Utils.GetOwnerKeyPair().PublicKey)
-                }));
+                });
 
             // Create transaction
             var tx = TransactionCreator.CreateTransaction(
