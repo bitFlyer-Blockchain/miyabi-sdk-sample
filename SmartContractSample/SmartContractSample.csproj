@@ -7,22 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="sc\sc1.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="sc\sc1.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Miyabi.Asset.Models" Version="3.1.4" />
     <PackageReference Include="Miyabi.Contract.Client" Version="3.1.4" />
     <PackageReference Include="Miyabi.ContractSdk" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Utility\Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ContractFiles\SampleContract.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>
