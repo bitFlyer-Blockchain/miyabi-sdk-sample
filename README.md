@@ -1,4 +1,4 @@
-# miyabi-sdk-sample-v3.1
+# miyabi-sdk-sample
 
 ## Projects
 

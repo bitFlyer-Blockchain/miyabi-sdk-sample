@@ -172,8 +172,7 @@ namespace PrivateDataSample
             ByteString key, 
             bool showHash)
         {
-            var pdEntry = PrivateDataApiCreator
-                .GetPrivateDataApi(
+            var pdEntry = new PrivateDataClient(
                     client,
                     Utils.GetBypassRemoteCertificateValidationHandler())
                 .GetPrivateDataEntryAsync(tableName, key, !showHash)
@@ -200,10 +199,10 @@ namespace PrivateDataSample
                 IEnumerable<PrivateKey> signingPrivateKeys)
         {
             // Obtain evidences for a private tx signed by all PDOs
-            var evidences = await PrivateDataApiCreator
-                .GetPrivateDataApi(
+            var evidences = await new PrivateDataClient(
                     client,
-                    Utils.GetBypassRemoteCertificateValidationHandler())
+                    Utils.GetBypassRemoteCertificateValidationHandler(),
+                    false)
                 .SignPrivateTransactionAsync(privateTx);
 
             // Create a final transaction using PDO members' evidences signed by
