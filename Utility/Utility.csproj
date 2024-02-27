@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Miyabi.ClientSdk" Version="3.2.0" />
-    <PackageReference Include="Miyabi.Cryptography.BouncyCastle" Version="3.2.0" />
-    <PackageReference Include="Miyabi.Hash.BouncyCastle" Version="3.2.0" />
-    <PackageReference Include="Miyabi.ModelSdk" Version="3.2.0" />
+    <PackageReference Include="Miyabi.ClientSdk" Version="3.3.0" />
+    <PackageReference Include="Miyabi.Cryptography.BouncyCastle" Version="3.3.0" />
+    <PackageReference Include="Miyabi.Hash.BouncyCastle" Version="3.3.0" />
+    <PackageReference Include="Miyabi.ModelSdk" Version="3.3.0" />
   </ItemGroup>
 
 

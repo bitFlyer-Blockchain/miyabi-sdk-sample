@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Miyabi.Asset.Client" Version="3.2.0" />
-    <PackageReference Include="Miyabi.Asset.Models" Version="3.2.0" />
+    <PackageReference Include="Miyabi.Asset.Client" Version="3.3.0" />
+    <PackageReference Include="Miyabi.Asset.Models" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>

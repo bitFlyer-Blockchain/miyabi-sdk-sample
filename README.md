@@ -33,4 +33,4 @@ In [Utility/Utils.cs](Utility/Utils.cs), there are some configuration that need 
 1. Put provided nuget packages into a folder and update your Visual Studio nuget settings.
 2. Clean the cache of nuget and restore all packages using nuget.
 3. Update private keys in reference to [Code update](#code-update) section.
-4. Run the test.
+
