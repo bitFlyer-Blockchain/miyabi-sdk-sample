@@ -32,6 +32,9 @@ namespace GeneralApiCall
             ContractRegistration.Initialize();
 
             await GetTables(client);
+
+            Console.WriteLine("Press enter to exit");
+            Console.ReadLine();
         }
 
         private static async Task GetTables(IClient client)
