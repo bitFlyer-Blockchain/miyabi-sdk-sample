@@ -4,6 +4,7 @@ using Miyabi.ClientSdk;
 using Miyabi.Common.Models;
 using System;
 using System.Threading.Tasks;
+using Miyabi.ModelSdk.Requests;
 using Utility;
 
 namespace NFTSample
@@ -128,10 +129,20 @@ namespace NFTSample
                 new PublicKeyAddress(Utils.GetUser1KeyPair()),
             };
 
-            foreach (var address in addresses)
+            var request = new EntriesRequest<Address>(TableName, addresses);
+            var response = await nftClient.GetBalancesAsync(request);
+            var accountBalances = response.Value;
+
+            foreach (var accountBalance in accountBalances)
             {
-                var result = await nftClient.GetBalanceAsync(TableName, address);
-                Console.WriteLine($"address={address}, count={result.Value}");
+	            var balance = accountBalance.Value.Data != null ?
+		            accountBalance.Value.Data.ToString() :
+		            accountBalance.Value.ApiError.ErrorCode.ToString();
+	            
+	            Console.WriteLine(
+		            $"Table='{TableName}', " +
+		            $"Account Address='{accountBalance.Key}', " +
+		            $"Account token balance='{balance}'");
             }
         }
     }
