@@ -4,6 +4,7 @@ using Miyabi.ClientSdk;
 using Miyabi.Common.Models;
 using System;
 using System.Threading.Tasks;
+using Miyabi.ModelSdk.Requests;
 using Utility;
 
 namespace CombinedTransaction
@@ -150,13 +151,22 @@ namespace CombinedTransaction
                 new PublicKeyAddress(Utils.GetUser0KeyPair()),
                 new PublicKeyAddress(Utils.GetUser1KeyPair()),
             };
-
-            foreach (var address in addresses)
+            foreach (var tableName in TableNames)
             {
-                var resultA = await assetClient.GetAssetAsync(TableNames[0], address);
-                var resultB = await assetClient.GetAssetAsync(TableNames[1], address);
-                Console.WriteLine(
-                    $"address={address}, CoinA amount={resultA.Value}, CoinB amount={resultB.Value}");
+	            var request = new EntriesRequest<Address>(tableName, addresses);
+	            var response = await assetClient.GetAssetsAsync(request);
+	            var accountBalances = response.Value;
+
+	            foreach (var accountBalance in accountBalances)
+	            {
+		            var balance = accountBalance.Value.Data != null ?
+			            accountBalance.Value.Data.ToString() :
+			            accountBalance.Value.ApiError.ErrorCode.ToString();
+		            Console.WriteLine(
+			            $"Table='{tableName}', " +
+			            $"Account Address='{accountBalance.Key}', " +
+			            $"Account balance='{balance}'");
+	            }
             }
         }
     }
