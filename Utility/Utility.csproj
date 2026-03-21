@@ -13,4 +13,9 @@
     <PackageReference Include="Miyabi.ModelSdk" Version="3.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
