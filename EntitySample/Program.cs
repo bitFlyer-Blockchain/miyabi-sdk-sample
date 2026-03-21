@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Miyabi.ClientSdk.Client;
 using Utility;
 
 namespace EntitySample

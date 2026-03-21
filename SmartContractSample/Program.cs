@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Miyabi.ClientSdk.Client;
 using SmartContractSample.ContractFiles;
 using Utility;
 using Miyabi.Cryptography;

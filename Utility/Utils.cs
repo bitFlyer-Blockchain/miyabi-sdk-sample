@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Miyabi;
 using Miyabi.ClientSdk;
+using Miyabi.ClientSdk.Client;
 using Miyabi.Common.Models;
 using Miyabi.Cryptography;
 

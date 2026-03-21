@@ -1,13 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <Platforms>x64</Platforms>
-  </PropertyGroup>
+  <Import Project="..\Common.props" />
 
   <ItemGroup>
-    <PackageReference Include="Miyabi.Entity.Client" Version="3.3.1" />
+    <PackageReference Include="Miyabi.Entity.Client" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>

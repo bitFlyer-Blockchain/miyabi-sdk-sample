@@ -4,6 +4,7 @@ using Miyabi.ClientSdk;
 using Miyabi.Common.Models;
 using System;
 using System.Threading.Tasks;
+using Miyabi.ClientSdk.Client;
 using Miyabi.ModelSdk.Requests;
 using Utility;
 
