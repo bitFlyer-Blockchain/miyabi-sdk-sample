@@ -1,6 +1,7 @@
 using Miyabi.Asset.Client;
 using Miyabi.Asset.Models;
 using Miyabi.ClientSdk;
+using Miyabi.ClientSdk.Client;
 using Miyabi.Common.Models;
 using System;
 using System.Threading.Tasks;

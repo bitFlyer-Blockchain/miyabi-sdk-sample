@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Platforms>x64</Platforms>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Miyabi.ClientSdk" Version="3.3.1" />
-    <PackageReference Include="Miyabi.Cryptography.BouncyCastle" Version="3.3.1" />
-    <PackageReference Include="Miyabi.Hash.BouncyCastle" Version="3.3.1" />
-    <PackageReference Include="Miyabi.ModelSdk" Version="3.3.1" />
+    <PackageReference Include="Miyabi.ClientSdk" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Cryptography.Secp256k1" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Hash.NativeHash" Version="3.4.0" />
+    <PackageReference Include="Miyabi.ModelSdk" Version="3.4.0" />
   </ItemGroup>
-
 
 </Project>

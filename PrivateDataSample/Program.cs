@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Miyabi;
 using Miyabi.ClientSdk;
+using Miyabi.ClientSdk.Client;
+using Miyabi.Common.Hash;
 using Miyabi.Common.Models;
 using Miyabi.Cryptography;
-using Miyabi.Hash;
 using Miyabi.PrivateData.Client;
 using Miyabi.PrivateData.Models;
+using Miyabi.PrivateData.Models.Payloads;
 using Miyabi.Serialization;
 using Newtonsoft.Json;
 using Utility;
@@ -50,7 +52,7 @@ namespace PrivateDataSample
         {
             var pdoMembers = Utils.PdoMembers;
             var tableAdminPrivateKey = Utils.GetTableAdminKeyPair().PrivateKey;
-            var hashedTableName = HashService.ComputeSHA256(tableName);
+            var hashedTableName = PrivateDataModelUtils.ComputeHash(tableName);
 
             // Create entry
             var entry = new CreatePrivateDataTable(
@@ -114,8 +116,8 @@ namespace PrivateDataSample
             var hashedTableName = HashService.ComputeSHA256(tableName);
 
             // Create entry
-            var hashedHexKey = HashService.ComputeSHA256(key);
-            var hashedHexValue = HashService.ComputeSHA256(value);
+            var hashedHexKey = PrivateDataModelUtils.ComputeHash(key);
+            var hashedHexValue = PrivateDataModelUtils.ComputeHash(value);
             var entry = new AddPrivateData(
                 // Need to pass hashed data since these data are exposed in all miyabi
                 hashedTableName,
