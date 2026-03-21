@@ -163,6 +163,27 @@ namespace Utility
             return handler;
         }
 
+        /// <summary>
+        /// Generates a multi-signature address using the
+        /// specified threshold and signer key-pairs.
+        /// </summary>
+        /// <returns>
+        /// The encoded multiSig address as a string.
+        /// </returns>
+        public static string GenerateMultiSigAddress(
+            int multisigThreshold,
+            KeyPair[] multisigSigners)
+        {
+            var multisigAddress = new MultiSigAddress(
+                multisigThreshold,
+                multisigSigners.Select(signer => signer.PublicKey));
+
+            Console.WriteLine(
+                $"Created {multisigThreshold}-of-{multisigSigners.Length}" +
+                $" multisig address: {multisigAddress}");
+            return multisigAddress.Encoded.ToString();
+        }
+
         public static KeyPair GetKeyPairFromKeystore(
             string keyStorePath,
             string passwordFilePath = null)

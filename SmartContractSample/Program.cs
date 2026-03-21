@@ -32,10 +32,9 @@ namespace SmartContractSample
 		static readonly KeyPair ContractInstanceOwner = Utils.GetOwnerKeyPair();
 
 		static readonly ByteString AssemblyId =
-			ContractUtils.GetAssemblyId(new[]
-			{
-				File.ReadAllText(ContractFilePath)
-			});
+			ContractUtils.GetAssemblyId([
+                File.ReadAllText(ContractFilePath)
+            ]);
 
 		static async Task Main(string[] args)
 		{
@@ -71,67 +70,73 @@ namespace SmartContractSample
 			await InvokeContract(
 				generalApi,
 				nameof(SampleContract.RegisterAccount),
-				new KeyPair[] { },
-				new[] { fromAccount.PublicKey.ToString() });
+                [],
+                [fromAccount.PublicKey.ToString()]);
 
 			// Call a queryable method. This operation is read only.
 			// Check whether the account is registered
 			await QueryMethod(contractClient,
 				nameof(SampleContract.IsAccountRegistered),
 				"Check if account registered. Expected: true",
-				new[] { fromAccount.PublicKey.ToString() });
+                [fromAccount.PublicKey.ToString()]);
 
 			// Call an invokable method. This operation can be read-write.
 			// Generate digital tokens
 			await InvokeContract(
 				generalApi,
 				nameof(SampleContract.GenerateAssetToken),
-				new KeyPair[] { },
-				new[] { fromAccount.PublicKey.ToString(), "100.0" });
+                [],
+                [fromAccount.PublicKey.ToString(), "100.0"]);
 
 			// Call a queryable method. This operation is read only.
 			// Check the account balance
 			await QueryMethod(contractClient,
 				nameof(SampleContract.GetBalanceOf),
 				"Get balance of account. Expected: 100.0",
-				new[] { fromAccount.PublicKey.ToString() });
+                [fromAccount.PublicKey.ToString()]);
 
 			// Call an invokable method. This operation can be read-write.
 			// Move the digital tokens amongst different accounts
 			await InvokeContract(
 				generalApi,
 				nameof(SampleContract.MoveAssetToken),
-				new[] { fromAccount },
-				new[] { fromAccount.PublicKey.ToString(), toAccount.PublicKey.ToString(), "100.0" });
+                [fromAccount],
+                [fromAccount.PublicKey.ToString(), toAccount.PublicKey.ToString(), "100.0"]);
 
 			// Call a queryable method. This operation is read only.
 			// Check whether the account is registered
 			await QueryMethod(contractClient,
 				nameof(SampleContract.IsAccountRegistered),
 				"Check if account registered. Expected: true",
-				new[] { fromAccount.PublicKey.ToString() });
+                [fromAccount.PublicKey.ToString()]);
 
 			// Call a queryable method. This operation is read only.
 			// Check whether the account is registered
 			await QueryMethod(contractClient,
 				nameof(SampleContract.IsAccountRegistered),
 				"Check if account registered. Expected: true",
-				new[] { toAccount.PublicKey.ToString() });
+                [toAccount.PublicKey.ToString()]);
 
-			// Call an invokable method. This operation can be read-write.
-			// Delete an account
-			await InvokeContract(
+            // Demonstrate a 2-of-3 multi-sig account.
+            await RegisterAndTransferWithMultiSigAccountAsync(
+                generalApi,
+                contractClient,
+                toAccount);
+
+            // Call an invokable method. This operation can be read-write.
+            // Delete an account
+            await InvokeContract(
 				generalApi,
 				nameof(SampleContract.DeleteAccount),
-				new[] { fromAccount },
-				new[] { fromAccount.PublicKey.ToString() });
+                [fromAccount],
+                [fromAccount.PublicKey.ToString()]);
 
 			// Call a queryable method. This operation is read only.
 			// Check whether the account is registered
 			await QueryMethod(contractClient,
 				nameof(SampleContract.IsAccountRegistered),
 				"Check if account registered. Expected: false",
-				new[] { fromAccount.PublicKey.ToString() });
+                [fromAccount.PublicKey.ToString()]);
 			
 			// Delete the contract instance.
 			// This will perform related table and data delete also.
@@ -159,12 +164,11 @@ namespace SmartContractSample
 
 			// Create transaction
 			var tx = TransactionCreator.CreateTransaction(
-				new[] { entry },
-				new[]
-				{
-					new SignatureCredential(
+                [entry],
+                [
+                    new SignatureCredential(
 						ContractAdmin.PublicKey)
-				});
+                ]);
 
 			// Sign transaction.
 			// Deploy contract requires contract admin signature
@@ -196,13 +200,12 @@ namespace SmartContractSample
 			// To generate instantiate contract,
 			// table admin and contract owner private key is required.
 			var txSigned = TransactionCreator.CreateTransactionBuilder(
-				new[] { entry },
-				new[]
-				{
-					new SignatureCredential(
+                    [entry],
+                    [
+                        new SignatureCredential(
 						TableAdmin.PublicKey),
 					new SignatureCredential(ContractInstanceOwner.PublicKey)
-				})
+                    ])
 				.Sign(TableAdmin.PrivateKey)
 				.Sign(ContractInstanceOwner.PrivateKey)
 				.Build();
@@ -240,7 +243,7 @@ namespace SmartContractSample
 						keyPair => new SignatureCredential(keyPair.PublicKey)));
 
 			var txBuilder = TransactionCreator.CreateTransactionBuilder(
-				new[] { entry },
+                [entry],
 				requiredCredentials);
 
 			foreach (var keyPair in signers)
@@ -274,7 +277,97 @@ namespace SmartContractSample
 			Console.WriteLine($"Query output:={result.Value}");
 		}
 
-		private static async Task DeleteContractInstance(GeneralApi generalApi)
+        private static async Task RegisterAndTransferWithMultiSigAccountAsync(
+            GeneralApi generalApi,
+            ContractClient contractClient,
+            KeyPair recipientAccount)
+        {
+            Console.WriteLine("\nExecuting multisig account flow");
+
+            // Create signer key pairs for the multisig account.
+            var multisigSigners = Utils.GetKeyPairs(3);
+            // Generate a 2-of-3 multisig address from the signer set.
+            var multisigAddressEncoded = Utils.GenerateMultiSigAddress(
+                2, multisigSigners);
+           
+            // Register the multisig account in the contract.
+            await InvokeContract(
+                generalApi,
+                nameof(SampleContract.RegisterAccount),
+                [],
+                [multisigAddressEncoded]);
+
+            // Confirm the multisig account registration.
+            await QueryMethod(
+                contractClient,
+                nameof(SampleContract.IsAccountRegistered),
+                "Check if multisig account registered. Expected: true",
+                [multisigAddressEncoded]);
+
+            // Mint tokens to the multisig account.
+            const string multisigMintAmount = "50.0";
+            await InvokeContract(
+                generalApi,
+                nameof(SampleContract.GenerateAssetToken),
+                [],
+                [multisigAddressEncoded, multisigMintAmount]);
+
+            // Verify the multisig account balance.
+            await QueryMethod(
+                contractClient,
+                nameof(SampleContract.GetBalanceOf),
+                "Get multisig account balance. Expected: 50.0",
+                [multisigAddressEncoded]);
+
+            // Attempt a transfer with too few signatures (expected failure).
+            Console.WriteLine("\nAttempting multisig transfer with insufficient" +
+                              " signatures (expected failure)");
+            var insufficientSigners = multisigSigners.Take(1).ToArray();
+
+            await InvokeContract(
+                generalApi,
+                nameof(SampleContract.MoveAssetToken),
+                insufficientSigners,
+                [
+                    multisigAddressEncoded,
+                    recipientAccount.PublicKey.ToString(),
+                    multisigMintAmount
+                ]);
+
+            // Transfer tokens with the required signatures.
+            await InvokeContract(
+                generalApi,
+                nameof(SampleContract.MoveAssetToken),
+                multisigSigners,
+                [
+                    multisigAddressEncoded,
+                    recipientAccount.PublicKey.ToString(),
+                    multisigMintAmount
+                ]);
+
+            // Check the multisig account balance after transfer.
+            await QueryMethod(
+                contractClient,
+                nameof(SampleContract.GetBalanceOf),
+                "Get multisig account balance after transfer. Expected: 0.0",
+                [multisigAddressEncoded]);
+
+            // Delete the multisig account.
+            await InvokeContract(
+                generalApi,
+                nameof(SampleContract.DeleteAccount),
+                multisigSigners,
+                [multisigAddressEncoded]);
+
+            // Confirm the multisig account deletion.
+            await QueryMethod(
+                contractClient,
+                nameof(SampleContract.IsAccountRegistered),
+                "Check multisig account deletion. Expected: false",
+                [multisigAddressEncoded]);
+        }
+
+        private static async Task DeleteContractInstance(GeneralApi generalApi)
 		{
 			Console.WriteLine($"\nDeleting contract instance: {InstanceName}");
 
@@ -288,12 +381,11 @@ namespace SmartContractSample
 			// Delete contract instance requires
 			// signature of the contract instance owners.
 			var txSigned = TransactionCreator.CreateTransactionBuilder(
-					new[] { entry },
-					new[]
-					{
+                    [entry],
+                    [
                         // Contract Instance Owner
 				        new SignatureCredential(ContractInstanceOwner.PublicKey)
-					})
+                    ])
 				.Sign(ContractInstanceOwner.PrivateKey)
 				.Build();
 
