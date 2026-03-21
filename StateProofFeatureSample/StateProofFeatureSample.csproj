@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\Common.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Miyabi.Asset.Client" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Asset.Models" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Binary.Client" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Binary.Models" Version="3.4.0" />
+    <PackageReference Include="Miyabi.ClientSdk" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Cryptography.Secp256k1" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Entity.Client" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Entity.Models" Version="3.4.0" />
+    <PackageReference Include="Miyabi.Hash.NativeHash" Version="3.4.0" />
+    <PackageReference Include="Miyabi.ModelSdk" Version="3.4.0" />
+    <PackageReference Include="Miyabi.NFT.Client" Version="3.4.0" />
+    <PackageReference Include="Miyabi.NFT.Models" Version="3.4.0" />
+    <PackageReference Include="Miyabi.PrivateData.Client" Version="3.4.0" />
+    <PackageReference Include="Miyabi.PrivateData.Models" Version="3.4.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility\Utility.csproj" />
+  </ItemGroup>
+</Project>

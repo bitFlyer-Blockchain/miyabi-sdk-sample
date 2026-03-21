@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFTSample", "NFTSample\NFTS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrivateDataSample", "PrivateDataSample\PrivateDataSample.csproj", "{D9150251-90C5-42B3-A990-B37618C74916}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateProofFeatureSample", "StateProofFeatureSample\StateProofFeatureSample.csproj", "{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -56,6 +58,10 @@ Global
 		{D9150251-90C5-42B3-A990-B37618C74916}.Debug|x64.Build.0 = Debug|x64
 		{D9150251-90C5-42B3-A990-B37618C74916}.Release|x64.ActiveCfg = Release|x64
 		{D9150251-90C5-42B3-A990-B37618C74916}.Release|x64.Build.0 = Release|x64
+		{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}.Debug|x64.ActiveCfg = Debug|x64
+		{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}.Debug|x64.Build.0 = Debug|x64
+		{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}.Release|x64.ActiveCfg = Release|x64
+		{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
