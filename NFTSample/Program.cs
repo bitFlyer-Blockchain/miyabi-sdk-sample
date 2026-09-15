@@ -14,6 +14,11 @@ namespace NFTSample
     {
         const string TableName = "NFTTableSample";
 
+        /// <summary>
+        /// Demonstrates the NFT module: creating a table, minting a token to
+        /// an owner, moving it to another owner, reading balances/ownership,
+        /// and checking table/token existence.
+        /// </summary>
         static async Task Main(string[] args)
         {
             var handler = Utils.GetBypassRemoteCertificateValidationHandler();
@@ -26,11 +31,20 @@ namespace NFTSample
 
             var tokenId = "my_token_id";
 
+            // Create the table, then mint one token to user0.
             await CreateNFTTable(client);
             await AddNFT(client, tokenId);
             await ShowNFTBalance(client);
+
+            // Move the token from user0 to user1.
             await MoveNFT(client, tokenId);
             await ShowNFTBalance(client);
+
+            // Check table/token existence
+            await ShowNFTTableExistence(client, tokenId);
+
+            // Dump the full table content
+            await ShowNFTTable(client);
 
             Console.WriteLine("Press enter to exit");
             Console.ReadLine();
@@ -47,22 +61,23 @@ namespace NFTSample
                 TableName,
                 false,
                 false,
-                new Address[]
-                {
+                [
                     new PublicKeyAddress(
                         Utils.GetOwnerKeyPair().PublicKey)
-                });
+                ]);
 
             // Create transaction
             var tx = TransactionCreator.CreateTransaction(
-                new[] { entry },
-                new[] { new SignatureCredential(
-                    Utils.GetTableAdminKeyPair().PublicKey) });
+                [entry],
+                [
+                    new SignatureCredential(
+                    Utils.GetTableAdminKeyPair().PublicKey)
+                ]);
 
             // Sign transaction. To create a table, TableAdmin's private key is
             // required
             var txSigned = TransactionCreator.SignTransaction(
-                tx, new[] { Utils.GetTableAdminKeyPair().PrivateKey });
+                tx, [Utils.GetTableAdminKeyPair().PrivateKey]);
 
             // Send transaction
             await generalApi.SendTransactionAsync(txSigned);
@@ -85,11 +100,10 @@ namespace NFTSample
             // Create signed transaction with builder. To add nft,
             // token admin's private key is required.
             var txSigned = TransactionCreator.CreateTransactionBuilder(
-                new [] { entry },
-                new []
-                {
-                    new SignatureCredential(Utils.GetOwnerKeyPair().PublicKey)
-                })
+                    [entry],
+                    [
+                        new SignatureCredential(Utils.GetOwnerKeyPair().PublicKey)
+                    ])
                 .Sign(Utils.GetOwnerKeyPair().PrivateKey)
                 .Build();
 
@@ -136,14 +150,42 @@ namespace NFTSample
 
             foreach (var accountBalance in accountBalances)
             {
-	            var balance = accountBalance.Value.Data != null ?
-		            accountBalance.Value.Data.ToString() :
-		            accountBalance.Value.ApiError.ErrorCode.ToString();
-	            
-	            Console.WriteLine(
-		            $"Table='{TableName}', " +
-		            $"Account Address='{accountBalance.Key}', " +
-		            $"Account token balance='{balance}'");
+                var balance = accountBalance.Value.Data != null ?
+                    accountBalance.Value.Data.ToString() :
+                    accountBalance.Value.ApiError.ErrorCode.ToString();
+
+                Console.WriteLine(
+                    $"Table='{TableName}', " +
+                    $"Account Address='{accountBalance.Key}', " +
+                    $"Account token balance='{balance}'");
+            }
+        }
+
+        private static async Task ShowNFTTableExistence(
+            IClient client, string tokenId)
+        {
+            var nftClient = new NFTClient(client);
+
+            // CheckNFTTableAsync/CheckNFTTokenAsync return true/false —
+            // no need to fetch the actual data just to know it exists.
+            var tableExists = (await nftClient.CheckNFTTableAsync(TableName)).Value;
+            var tokenExists =
+                (await nftClient.CheckNFTTokenAsync(TableName, tokenId)).Value;
+            Console.WriteLine(
+                $"Table='{TableName}' exists={tableExists}, " +
+                $"Token='{tokenId}' exists={tokenExists}");
+        }
+
+        private static async Task ShowNFTTable(IClient client)
+        {
+            var nftClient = new NFTClient(client);
+
+            // Dump the full content of the table: every token id and owner.
+            var table = (await nftClient.GetNFTTableAsync(TableName)).Value;
+            foreach (var (id, owner) in table)
+            {
+                Console.WriteLine(
+                    $"Table='{TableName}', TokenId='{id}', Owner='{owner}'");
             }
         }
     }

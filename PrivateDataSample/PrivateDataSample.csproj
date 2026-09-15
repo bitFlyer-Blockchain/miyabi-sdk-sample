@@ -3,7 +3,7 @@
   <Import Project="..\Common.props" />
 
   <ItemGroup>
-    <PackageReference Include="Miyabi.PrivateData.Client" Version="3.4.0" />
+    <PackageReference Include="Miyabi.PrivateData.Client" Version="3.5.0" />
   </ItemGroup>
 
   <ItemGroup>

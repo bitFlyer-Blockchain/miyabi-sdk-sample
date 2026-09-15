@@ -8,11 +8,11 @@ using Miyabi.ClientSdk.Client;
 using Miyabi.ModelSdk.Requests;
 using Utility;
 
-namespace CombinedTransaction
+namespace CombinedTransactionSample
 {
     class Program
     {
-        private static readonly string[] TableNames = new[] {"CoinA", "CoinB"};
+        private static readonly string[] TableNames = ["CoinA", "CoinB"];
 
         static async Task Main(string[] args)
         {
@@ -44,31 +44,31 @@ namespace CombinedTransaction
                 TableNames[0],
                 false,
                 false,
-                new Address[]
-                {
+                [
                     new PublicKeyAddress(
                         Utils.GetOwnerKeyPair().PublicKey)
-                });
+                ]);
             var tableB = new CreateAssetTable(
                 TableNames[1],
                 false,
                 false,
-                new Address[]
-                {
+                [
                     new PublicKeyAddress(
                         Utils.GetOwnerKeyPair().PublicKey)
-                });
+                ]);
 
             // Create transaction
             var tx = TransactionCreator.CreateTransaction(
-                new[] { tableA, tableB },
-                new[] { new SignatureCredential(
-                    Utils.GetTableAdminKeyPair().PublicKey) });
+                [tableA, tableB],
+                [
+                    new SignatureCredential(
+                    Utils.GetTableAdminKeyPair().PublicKey)
+                ]);
 
             // Sign transaction. To create a table, TableAdmin's private key is
             // required
             var txSigned = TransactionCreator.SignTransaction(
-                tx, new[] { Utils.GetTableAdminKeyPair().PrivateKey });
+                tx, [Utils.GetTableAdminKeyPair().PrivateKey]);
 
             // Send transaction
             await generalApi.SendTransactionAsync(txSigned);
@@ -95,11 +95,10 @@ namespace CombinedTransaction
             // Create signed transaction with builder. To generate asset,
             // table owner's private key is required.
             var txSigned = TransactionCreator.CreateTransactionBuilder(
-                new [] { coinA, coinB },
-                new []
-                {
-                    new SignatureCredential(Utils.GetOwnerKeyPair().PublicKey)
-                })
+                    [coinA, coinB],
+                    [
+                        new SignatureCredential(Utils.GetOwnerKeyPair().PublicKey)
+                    ])
                 .Sign(Utils.GetOwnerKeyPair().PrivateKey)
                 .Build();
 
@@ -127,12 +126,11 @@ namespace CombinedTransaction
                 new PublicKeyAddress(Utils.GetUser0KeyPair()));
 
             var txSigned = TransactionCreator.CreateTransactionBuilder(
-                new [] { coinA, coinB },
-                new []
-                {
-                    new SignatureCredential(Utils.GetUser0KeyPair().PublicKey),
-                    new SignatureCredential(Utils.GetUser1KeyPair().PublicKey),
-                })
+                    [coinA, coinB],
+                    [
+                        new SignatureCredential(Utils.GetUser0KeyPair().PublicKey),
+                        new SignatureCredential(Utils.GetUser1KeyPair().PublicKey)
+                    ])
                 .Sign(Utils.GetUser0KeyPair().PrivateKey)
                 .Sign(Utils.GetUser1KeyPair().PrivateKey)
                 .Build();
@@ -154,20 +152,20 @@ namespace CombinedTransaction
             };
             foreach (var tableName in TableNames)
             {
-	            var request = new EntriesRequest<Address>(tableName, addresses);
-	            var response = await assetClient.GetAssetsAsync(request);
-	            var accountBalances = response.Value;
+                var request = new EntriesRequest<Address>(tableName, addresses);
+                var response = await assetClient.GetAssetsAsync(request);
+                var accountBalances = response.Value;
 
-	            foreach (var accountBalance in accountBalances)
-	            {
-		            var balance = accountBalance.Value.Data != null ?
-			            accountBalance.Value.Data.ToString() :
-			            accountBalance.Value.ApiError.ErrorCode.ToString();
-		            Console.WriteLine(
-			            $"Table='{tableName}', " +
-			            $"Account Address='{accountBalance.Key}', " +
-			            $"Account balance='{balance}'");
-	            }
+                foreach (var accountBalance in accountBalances)
+                {
+                    var balance = accountBalance.Value.Data != null ?
+                        accountBalance.Value.Data.ToString() :
+                        accountBalance.Value.ApiError.ErrorCode.ToString();
+                    Console.WriteLine(
+                        $"Table='{tableName}', " +
+                        $"Account Address='{accountBalance.Key}', " +
+                        $"Account balance='{balance}'");
+                }
             }
         }
     }
