@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using Miyabi;
 using Miyabi.ClientSdk;
@@ -39,10 +38,9 @@ namespace Utility
         /// </summary>
         public static IReadOnlyCollection<PdoMember> PdoMembers =>
             new List<PdoMember>(
-                new[]
-                {
-                new PdoMember(ByteString.Parse(PdoPublicKey), PdoUrl),
-                });
+            [
+                new PdoMember(ByteString.Parse(PdoPublicKey), PdoUrl)
+            ]);
 
         /// <summary>
         /// Table admin private key according to miyabi blockchain-config.
@@ -130,9 +128,16 @@ namespace Utility
         /// </summary>
         /// <param name="api">General api object.</param>
         /// <param name="id">Transaction id</param>
+        /// <param name="timeout">
+        /// Maximum time to wait before giving up. Defaults to 30 seconds.
+        /// </param>
         /// <returns>transaction's result code.</returns>
-        public static async Task<string> WaitTx(GeneralApi api, ByteString id)
+        public static async Task<string> WaitTx(
+            GeneralApi api, ByteString id, TimeSpan? timeout = null)
         {
+            var effectiveTimeout = timeout ?? TimeSpan.FromSeconds(30);
+            var deadline = DateTime.UtcNow + effectiveTimeout;
+
             while (true)
             {
                 var result = await api.GetTransactionResultAsync(id);
@@ -141,7 +146,14 @@ namespace Utility
                     return result.Value.ResultCode.ToString();
                 }
 
-                Thread.Sleep(100);
+                if (DateTime.UtcNow >= deadline)
+                {
+                    throw new TimeoutException(
+                        $"Transaction {id} did not complete within " +
+                        $"{effectiveTimeout}.");
+                }
+
+                await Task.Delay(100);
             }
         }
 

@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrivateDataSample", "Privat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateProofFeatureSample", "StateProofFeatureSample\StateProofFeatureSample.csproj", "{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinarySample", "BinarySample\BinarySample.csproj", "{3EECFF74-8FE1-44D9-BB18-5DD114C310FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -62,6 +64,10 @@ Global
 		{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}.Debug|x64.Build.0 = Debug|x64
 		{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}.Release|x64.ActiveCfg = Release|x64
 		{07EC7FDC-A965-4CEC-BA14-17CC915BFDB9}.Release|x64.Build.0 = Release|x64
+		{3EECFF74-8FE1-44D9-BB18-5DD114C310FD}.Debug|x64.ActiveCfg = Debug|x64
+		{3EECFF74-8FE1-44D9-BB18-5DD114C310FD}.Debug|x64.Build.0 = Debug|x64
+		{3EECFF74-8FE1-44D9-BB18-5DD114C310FD}.Release|x64.ActiveCfg = Release|x64
+		{3EECFF74-8FE1-44D9-BB18-5DD114C310FD}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

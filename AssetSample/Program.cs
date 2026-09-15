@@ -14,6 +14,11 @@ namespace AssetSample
     {
         const string TableName = "AssetTableSample";
 
+        /// <summary>
+        /// Demonstrates the Asset module: creating a table, minting
+        /// an asset to an account, moving it to another
+        /// account, reading balances, and checking table/entry existence.
+        /// </summary>
         static async Task Main(string[] args)
         {
             var handler = Utils.GetBypassRemoteCertificateValidationHandler();
@@ -24,11 +29,20 @@ namespace AssetSample
             // In order to use a miyabi module, registering types is required.
             AssetTypesRegisterer.RegisterTypes();
 
+            // Create the table, then mint 1000 units to user0.
             await CreateAssetTable(client);
             await GenerateAsset(client);
             await ShowAsset(client);
+
+            // Move the full balance from user0 to user1.
             await MoveAsset(client);
             await ShowAsset(client);
+
+            // Check table/entry existence
+            await ShowAssetTableExistence(client);
+
+            // Dump the full table content
+            await ShowAssetTable(client);
 
             Console.WriteLine("Press enter to exit");
             Console.ReadLine();
@@ -44,22 +58,23 @@ namespace AssetSample
                 TableName,
                 false,
                 false,
-                new Address[]
-                {
+                [
                     new PublicKeyAddress(
                         Utils.GetOwnerKeyPair().PublicKey)
-                });
+                ]);
 
             // Create transaction
             var tx = TransactionCreator.CreateTransaction(
-                new[] { entry },
-                new[] { new SignatureCredential(
-                    Utils.GetTableAdminKeyPair().PublicKey) });
+                [entry],
+                [
+                    new SignatureCredential(
+                    Utils.GetTableAdminKeyPair().PublicKey)
+                ]);
 
             // Sign transaction. To create a table, TableAdmin's private key is
             // required
             var txSigned = TransactionCreator.SignTransaction(
-                tx, new[] { Utils.GetTableAdminKeyPair().PrivateKey });
+                tx, [Utils.GetTableAdminKeyPair().PrivateKey]);
 
             // Send transaction
             await generalApi.SendTransactionAsync(txSigned);
@@ -82,11 +97,10 @@ namespace AssetSample
             // Create signed transaction with builder. To generate asset,
             // table owner's private key is required.
             var txSigned = TransactionCreator.CreateTransactionBuilder(
-                new [] { entry },
-                new []
-                {
-                    new SignatureCredential(Utils.GetOwnerKeyPair().PublicKey)
-                })
+                    [entry],
+                    [
+                        new SignatureCredential(Utils.GetOwnerKeyPair().PublicKey)
+                    ])
                 .Sign(Utils.GetOwnerKeyPair().PrivateKey)
                 .Build();
 
@@ -133,13 +147,44 @@ namespace AssetSample
             var accountBalances = response.Value;
             foreach (var accountBalance in accountBalances)
             {
-	            var balance = accountBalance.Value.Data != null ?
-		            accountBalance.Value.Data.ToString() :
-		            accountBalance.Value.ApiError.ErrorCode.ToString();
-	            Console.WriteLine(
-		            $"Table='{TableName}', " +
-		            $"Account Address='{accountBalance.Key}', " +
-		            $"Account balance='{balance}'");
+                var balance = accountBalance.Value.Data != null ?
+                    accountBalance.Value.Data.ToString() :
+                    accountBalance.Value.ApiError.ErrorCode.ToString();
+                Console.WriteLine(
+                    $"Table='{TableName}', " +
+                    $"Account Address='{accountBalance.Key}', " +
+                    $"Account balance='{balance}'");
+            }
+        }
+
+        private static async Task ShowAssetTableExistence(IClient client)
+        {
+            var assetClient = new AssetClient(client);
+
+            // CheckAssetTableAsync/CheckAssetEntryAsync return true/false —
+            // no need to fetch the actual data just to know it exists.
+            var tableExists =
+                (await assetClient.CheckAssetTableAsync(TableName)).Value;
+            var user0Address = new PublicKeyAddress(Utils.GetUser0KeyPair());
+            var user0EntryExists =
+                (await assetClient.CheckAssetEntryAsync(TableName, user0Address))
+                    .Value;
+            Console.WriteLine(
+                $"Table='{TableName}' exists={tableExists}, " +
+                $"Account='{user0Address}' entry exists={user0EntryExists}");
+        }
+
+        private static async Task ShowAssetTable(IClient client)
+        {
+            var assetClient = new AssetClient(client);
+
+            // Dump the full content of the table: every address and balance.
+            var table = (await assetClient.GetAssetTableAsync(TableName)).Value;
+            foreach (var (address, balance) in table)
+            {
+                Console.WriteLine(
+                    $"Table='{TableName}', Address='{address}', " +
+                    $"Balance='{balance}'");
             }
         }
     }

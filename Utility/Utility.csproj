@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Miyabi.ClientSdk" Version="3.4.0" />
-    <PackageReference Include="Miyabi.Cryptography.Secp256k1" Version="3.4.0" />
-    <PackageReference Include="Miyabi.Hash.NativeHash" Version="3.4.0" />
-    <PackageReference Include="Miyabi.ModelSdk" Version="3.4.0" />
+    <PackageReference Include="Miyabi.ClientSdk" Version="3.5.0" />
+    <PackageReference Include="Miyabi.Cryptography.Secp256k1" Version="3.5.0" />
+    <PackageReference Include="Miyabi.Hash.NativeHash" Version="3.5.0" />
+    <PackageReference Include="Miyabi.ModelSdk" Version="3.5.0" />
   </ItemGroup>
 
   <ItemGroup>

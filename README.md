@@ -2,15 +2,16 @@
 
 ## Projects
 
-| Name                      | Description                                                                                                     |
-|:--------------------------|:----------------------------------------------------------------------------------------------------------------|
-| AssetSample               | Sample for asset table such as creating asset table, generating asset, moving asset and verifying asset.        |
+| Name                      | Description                                                                                                                                          |
+|:--------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AssetSample               | Sample for asset table such as creating asset table, generating asset, moving asset, verifying asset, checking table/entry existence and dumping the table. |
+| BinarySample              | Sample for binary table such as creating binary table, adding raw values, reading them back individually/in batch/in bulk, and checking table/entry existence. |
 | CombinedTransactionSample | Sample for combined transaction that swaps exchange between two tables.                                         |
-| EntitySample              | Sample for entity table such as creating entity table, adding value, creating parent-child relations and so on. |
-| GeneralApiCallSample      | Sample for showing how to call APIs.                                                                            |
-| SmartContractSample       | Sample for smart contract such as deploying, instantiating, invoking and querying contracts and so on.          |
-| NFTSample                 | Sample for nft table such as creating nft table, adding nft, moving nft and showing balance of nft.             |
-| PrivateDataSample         | Sample for private data such as creating private data table, adding data and showing data.                      |
+| EntitySample              | Sample for entity table such as creating entity table, adding value, creating parent-child relations, walking the entity tree, and checking table/entry existence. |
+| GeneralApiCallSample      | Sample for showing how to call the general-purpose blockchain APIs: listing tables, node/network info, batch transaction submission, transaction/block lookup by id or height, and per-entry change history. |
+| SmartContractSample       | Sample for smart contract such as deploying, instantiating, invoking and querying contracts, discovering deployed assemblies/instances, and multi-sig accounts. |
+| NFTSample                 | Sample for nft table such as creating nft table, adding nft, moving nft, showing balance of nft, and checking table/entry existence.             |
+| PrivateDataSample         | Sample for private data such as creating private data table, adding data, showing data (raw/hashed), checking existence, and listing entries.       |
 | StateProofFeatureSample   | Sample for state proof feature such as enabling feature, getting and verifying the state proof                  |
 | Utility                   | Utility methods.                                                                                                |
 
@@ -28,6 +29,11 @@ In [Utility/Utils.cs](Utility/Utils.cs), there are some configuration that need 
 | GetUser1KeyPair()         | The parameter of `GetKeyPairFromKeystore` is table user's p12 keystore path.                               |
 | PdoPublicKey              | Public key of the pdo member.                                                                              |
 | PdoUrl                    | URL of the pdo member.                                                                                     |
+
+## Prerequisites
+
+The .NET 10 SDK is required to build and run these projects (see
+[Common.props](Common.props)).
 
 ## Execution steps
 
